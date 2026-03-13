@@ -26,6 +26,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -38,7 +41,7 @@ jobs:
 
       # 登录到 GitHub Container Registry
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
             registry: ghcr.io
             username: ${{ github.actor }}
@@ -64,7 +67,7 @@ jobs:
             OPENCLAW_INSTALL_BROWSER=true
             OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
           tags: |
-            1panel/openclaw:${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
+            ghcr.io/${{ github.repository_owner }}/openclaw:${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -81,6 +84,6 @@ jobs:
             OPENCLAW_DOCKER_APT_PACKAGES="ffmpeg build-essential git curl jq bash ca-certificates chromium build-essential fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu jq openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify"
             OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
           tags: |
-            repobor/openclaw:latest
+            ghcr.io/${{ github.repository_owner }}/openclaw:${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
