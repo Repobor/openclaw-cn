@@ -60,10 +60,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-        images: ghcr.io/repobor/openclaw
-        tags: |
-          type=raw,value=${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
-          type=raw,value=latest,enable=${{ github.event_name == 'push' }}
+          images: ghcr.io/repobor/openclaw
+          tags: |
+            type=raw,value=${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
+            type=raw,value=latest,enable=${{ github.event_name == 'push' }}
 
       - name: Build OpenClaw Image and Push
         uses: docker/build-push-action@v6
@@ -76,6 +76,6 @@ jobs:
             OPENCLAW_INSTALL_BROWSER=true
             OPENCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential git curl jq bash ca-certificates chromium fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify
             OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
-          tags: tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
