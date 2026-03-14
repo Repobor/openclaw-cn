@@ -74,7 +74,7 @@ jobs:
           push: true
           build-args: |
             OPENCLAW_INSTALL_BROWSER=true
-            OPENCLAW_DOCKER_APT_PACKAGES="ffmpeg build-essential git curl jq bash ca-certificates chromium fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify"
+            OPENCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential git curl jq bash ca-certificates chromium fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify
             OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
           tags: tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
