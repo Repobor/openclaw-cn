@@ -43,9 +43,9 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download Source
         run: |
@@ -56,6 +56,15 @@ jobs:
           mkdir -p _src/openclaw/openclaw
           cp Dockerfile Caddyfile docker-entrypoint.sh _src/openclaw/openclaw/
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+        images: ghcr.io/repobor/openclaw
+        tags: |
+          type=raw,value=${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
+          type=raw,value=latest,enable=${{ github.event_name == 'push' }}
+
       - name: Build OpenClaw Image and Push
         uses: docker/build-push-action@v6
         with:
@@ -65,25 +74,8 @@ jobs:
           push: true
           build-args: |
             OPENCLAW_INSTALL_BROWSER=true
+            OPENCLAW_DOCKER_APT_PACKAGES="ffmpeg build-essential git curl jq bash ca-certificates chromium fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify"
             OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
-          tags: |
-            ghcr.io/repobor/openclaw:${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Push Latest Tag
-        if: ${{ github.event_name == 'push' || github.event.inputs.pushLatest == 'true' }}
-        uses: docker/build-push-action@v6
-        with:
-          context: _src/openclaw
-          file: _src/openclaw/openclaw/Dockerfile
-          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64/v8' }}
-          push: true
-          build-args: |
-            OPENCLAW_INSTALL_BROWSER=true
-            OPENCLAW_DOCKER_APT_PACKAGES="ffmpeg build-essential git curl jq bash ca-certificates chromium build-essential fonts-liberation fonts-noto-cjk fonts-noto-color-emoji gosu jq openssh-client procps python3 python3-pip python3-venv socat tini unzip websockify"
-            OPENCLAW_VERSION=${{ github.event.inputs.openclawTag }}
-          tags: |
-            ghcr.io/repobor/openclaw:${{ github.event.inputs.dockerhubTag || github.event.inputs.openclawTag }}
+          tags: tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
