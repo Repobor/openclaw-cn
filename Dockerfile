@@ -245,11 +245,9 @@ RUN curl -fsSL https://linuxmirrors.cn/main-lite.sh -o /tmp/main-lite.sh \
 && bash /tmp/main-lite.sh \
   --source mirrors.ustc.edu.cn \
   --protocol http \
-  --use-intranet-source false \
   --backup true \
   --upgrade-software false \
-  --clean-cache false \
-  --ignore-backup-tips
+  --clean-cache false
 
 ENV NODE_ENV=production
 
