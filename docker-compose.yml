@@ -1,0 +1,10 @@
+services:
+  openclaw:
+    image: ghcr.io/repobor/openclaw:latest
+    container_name: openclaw
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
+    ports:
+      - 18789:18789
+    restart: unless-stopped
+    network_mode: bridge
