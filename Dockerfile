@@ -241,7 +241,8 @@ RUN mkdir -p "$PNPM_HOME" && \
 RUN ln -sf /app/openclaw.mjs /usr/local/bin/openclaw \
  && chmod 755 /app/openclaw.mjs
 # Change Mirrors Source
-RUN bash <(curl -sSL https://linuxmirrors.cn/main-lite.sh) \
+RUN curl -fsSL https://linuxmirrors.cn/main-lite.sh -o /tmp/main-lite.sh \
+&& bash /tmp/main-lite.sh \
   --source mirrors.ustc.edu.cn \
   --protocol http \
   --use-intranet-source false \

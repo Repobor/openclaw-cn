@@ -61,18 +61,6 @@ docker run --rm -p 18789:18789 openclaw:${OPENCLAW_TAG}
 > - 使用 `--network host`，或
 > - 覆盖默认命令并将网关绑定到局域网地址（如 `--bind lan`），并配置认证信息。
 
-### 运行时环境变量
-
-- `CADDY_HTTPS_PORT`：Caddy HTTPS 监听端口（默认 8443）
-- `CADDY_SITE_ADDRESS`：站点地址（默认 127.0.0.1）
-
-示例：
-```bash
-docker run --rm -p 9443:9443 \
-  -e CADDY_HTTPS_PORT=9443 \
-  -e CADDY_SITE_ADDRESS=localhost \
-  openclaw:${OPENCLAW_TAG}
-```
 
 ## 发布镜像（GitHub Actions）
 
