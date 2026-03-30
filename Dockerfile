@@ -61,6 +61,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY ui/package.json ./ui/package.json
 COPY patches ./patches
+COPY scripts/postinstall-bundled-plugins.mjs ./scripts/postinstall-bundled-plugins.mjs
 
 COPY --from=ext-deps /out/ ./extensions/
 
@@ -257,9 +258,9 @@ ENV NODE_ENV=production
 USER node
 # ---- add china channel ----
 RUN true && \
-  timeout 1000 openclaw plugins install @soimy/dingtalk || true && \
-  timeout 1000 openclaw plugins install @tencent-connect/openclaw-qqbot@latest || true && \
-  timeout 1000 openclaw plugins install @sunnoy/wecom || true
+  timeout 300 openclaw plugins install @soimy/dingtalk || true && \
+  timeout 300 openclaw plugins install @tencent-connect/openclaw-qqbot@latest || true && \
+  timeout 300 openclaw plugins install @sunnoy/wecom || true
 
 ENV HOME=/home/node \
   TERM=xterm-256color \
