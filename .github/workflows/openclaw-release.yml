@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
     inputs:
       openclawTag:
-        default: "2026.3.12"
-        description: "OpenClaw Release Tag 2026.3.12, etc."
+        default: "2026.4.10"
+        description: "OpenClaw Release Tag 2026.4.10, etc."
         required: true
       dockerhubTag:
-        default: "2026.3.12"
+        default: "2026.4.10"
         description: "Docker Hub Tag"
         required: false
       platforms:
@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: openclaw/openclaw
-          ref: ${{ github.event.inputs.openclawTag }}
+          ref: ${{ startsWith(github.event.inputs.openclawTag, 'v') && github.event.inputs.openclawTag || format('v{0}', github.event.inputs.openclawTag) }}
           path: _src/openclaw
 
       - name: Prepare Build Files
