@@ -48,11 +48,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download Source
+        uses: actions/checkout@v4
+        with:
+          repository: openclaw/openclaw
+          ref: ${{ github.event.inputs.openclawTag }}
+          path: _src/openclaw
+
+      - name: Prepare Build Files
         run: |
-          set -euo pipefail
-          mkdir -p _src/openclaw
-          curl -fsSL "https://github.com/openclaw/openclaw/archive/refs/tags/v${{ github.event.inputs.openclawTag }}.tar.gz" \
-            | tar -xz -C _src/openclaw --strip-components=1
           mkdir -p _src/openclaw/openclaw
           cp Dockerfile _src/openclaw/openclaw/
 
