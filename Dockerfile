@@ -248,6 +248,9 @@ RUN --mount=type=cache,id=openclaw-bookworm-apt-cache,target=/var/cache/apt,shar
         docker-ce-cli docker-compose-plugin; \
     fi
 
+ENV PNPM_HOME="/usr/local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
 RUN mkdir -p "$PNPM_HOME" && \
   pnpm config set global-bin-dir "$PNPM_HOME" && \
   chmod -R 755 "$PNPM_HOME"
@@ -292,5 +295,4 @@ ENV HOME=/home/node \
 # For external access from host/ingress, override bind to "lan" and set auth.
 HEALTHCHECK --interval=3m --timeout=10s --start-period=15s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:18789/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-
 CMD ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
